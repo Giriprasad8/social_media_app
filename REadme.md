@@ -6,12 +6,24 @@ This repository contains the complete source code for the Community Application,
 - **Frontend** – React / Next.js (or your framework)  
 - **Database** – PostgreSQL setup with required tables  
 
----
+--- System requirements
+
+## | Component             | Version Required        |
+| --------------------- | ----------------------- |
+| **Node.js**           | 18.x LTS (NOT 20 or 24) |
+| **npm**               | 9+                      |
+| **PostgreSQL**        | 14 or 15                |
+| **pgAdmin**           | Any version             |
+| **React Native CLI**  | Latest                  |
+| **Android Studio**    | For running mobile app  |
+| **Qdrant (Optional)** | 1.x (Local or Cloud)    |
+
 
 ## 🚀 Project Requirements
 This project can be run locally using:
 
-- Node.js v18+  
+- Node.js v18+  (** IMPORTANT **) 
+
 /my-backend
  ├── src
  │   ├── app.ts
@@ -33,76 +45,85 @@ This project can be run locally using:
  ├── package.json
  └── metro.config.js
 
-## Database Setup (PostgreSQL)
-## Create a new database
+## Backend Setup (Node.js + TypeScript + PostgreSQL)
 
-CREATE DATABASE mydb;
+|--- Navigate to backend folder - cd my-backend
+|--- Install dependencies       - npm install
+|--- Create postgresSQL         - open postgres -> Create a DataBase ---> Database name: mydb
+                                                                          Username: postgres
+                                                                          Password: your_password
 
-## inside pqsl
+|--- Create .env file  - Create a new file Named .env inside my-backend/: OPENAI_API_KEY=YOUR_KEY_HERE
+                                                                          QDRANT_API_URL=http://localhost:6333
+                                                                          QDRANT_API_KEY=YOUR_KEY_HERE
+                                                                          DB_HOST=localhost
+                                                                          DB_PORT=5432
+                                                                          DB_USERNAME=postgres
+                                                                          DB_PASSWORD=your_password
+                                                                          DB_NAME=mydb
+|--- start the backend  - npm run dev
+|--- If successfullget  - Server running on http://localhost:3000
+                          Database connected
 
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+## Frontend Setup (React Native)
 
-## update your .env
-DB_HOST=localhost
-DB_PORT=5432
-DB_USERNAME=postgres
-DB_PASSWORD=yourPassword
-DB_NAME=mydb
+|--- Navigate to Frontend Folder - cd communityapp
+|--- Install dependencies        - npm install
+|--- Create .env file            - API_BASE_URL=http://YOUR_LOCAL_IP:3000
+|--- Find your ip                - ipconfig - use IPV4
+|--- Run the Android app         - npm start
 
-## Backend node setup
- cb my-backend
 
- ## install
+## Running the full project
+|--- Start postgreSQL
+|--- Start Backend (my-backend)
+|--- Start Frontend (communityapp)
+|--- App loads posts, login, create post, search, Filter
 
- npm install
-  ## add your rnvironmental variable
-  ## create .env file in my-backend
-  OPENAI_API_KEY=yourkey
-QDRANT_API_URL=http://localhost:6333
-QDRANT_API_KEY=your_qdrant_key
 
-DB_HOST=localhost
-DB_PORT=5432
-DB_USERNAME=postgres
-DB_PASSWORD=yourpassword
-DB_NAME=mydb
+## API Endpoints
 
- ## start the backend
-npm run dev
+| Method | Endpoint       | Description                           |
+| ------ | -------------- | ------------------------------------- |
+| POST   | /auth/register | Register user                         |
+| POST   | /auth/login    | Login user                            |
+| GET    | /posts         | Get all posts                         |
+| POST   | /posts         | Create a post                         |
+| POST   | /replies       | Add reply to post                     |
+| GET    | /posts/filter  | Apply filter (type + radius + search) |
 
-runs on = http://localhost:3000
 
-## Frontend setup
-cd communityapp
-npm install
-npx pod-install
-## run the app
-npx react-native run andriod
+## Optional: Vector DB + RAG (Qdrant)
 
-## running full project
-make sure your DB is connected
+|--- Start Qdrant locally (DOCKER) --docker run -p 6333:6333 qdrant/qdrant
+|--- The Backend run automatically --- Generates embedding
+                                   --- Stores Vectors
+                                   --- Enables sematic search
 
-cd my-backend
-npm run dev
 
-cd communityapp
-npx react-native run andriod
+##  Testing
 
-## Environment variable 
-.env (Backend)
-OPENAI_API_KEY=yourkey
-QDRANT_API_URL=http://localhost:6333
-QDRANT_API_KEY=your_key
+|--- After setup      --- Backend must run without any error
+                      --- Frontend must open the app
+                      --- Login and Signup must work
+                      --- Create Post must work
+                      --- Replies must work
+                      --- Search + Filter must work
 
-DB_HOST=localhost
-DB_PORT=5432
-DB_USERNAME=postgres
-DB_PASSWORD=yourpassword
-DB_NAME=mydb
+## Troubleshooting
 
-.env (Frontend)
-API_URL=http://YOUR_LOCAL_IP:3000
+❌ “ECONNREFUSED 5432”        --- PostgreSQL is not running.
+❌ “Missing OPENAI_API_KEY”   --- Check .env file.
+❌ React Native build fails   --- cd android
+                                   ./gradlew clean
 
-## Find your ip
-ipconfig
+                                
+
+
+
+
+
+
+
+
 
